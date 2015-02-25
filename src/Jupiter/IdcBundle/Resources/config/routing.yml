@@ -1,0 +1,3 @@
+jupiter_idc_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: JupiterIdcBundle:Default:index }

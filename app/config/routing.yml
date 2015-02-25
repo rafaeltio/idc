@@ -1,0 +1,7 @@
+jupiter_idc:
+    resource: "@JupiterIdcBundle/Resources/config/routing.yml"
+    prefix:   /
+
+app:
+    resource: @AppBundle/Controller/
+    type:     annotation

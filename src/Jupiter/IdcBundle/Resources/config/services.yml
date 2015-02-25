@@ -1,0 +1,4 @@
+services:
+#    jupiter_idc.example:
+#        class: Jupiter\IdcBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]
