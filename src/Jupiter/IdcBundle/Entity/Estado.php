@@ -29,11 +29,10 @@ class Estado
     private $nome;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="capitalCodCidade", type="integer")
-     */
-    private $capitalCodCidade;
+     * @ORM\OneToOne(targetEntity="Cidade")
+     * @ORM\JoinColumn(name="capital_id", referencedColumnName="id")
+     **/
+    private $capital;
 
     /**
      * @var string

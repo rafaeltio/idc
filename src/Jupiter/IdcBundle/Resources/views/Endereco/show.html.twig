@@ -1,0 +1,44 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>Endereco</h1>
+
+    <table class="record_properties">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ entity.id }}</td>
+            </tr>
+            <tr>
+                <th>Tipo</th>
+                <td>{{ entity.tipo }}</td>
+            </tr>
+            <tr>
+                <th>Logradouro</th>
+                <td>{{ entity.logradouro }}</td>
+            </tr>
+            <tr>
+                <th>Cep</th>
+                <td>{{ entity.cep }}</td>
+            </tr>
+            <tr>
+                <th>Complemento</th>
+                <td>{{ entity.complemento }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('endereco') }}">
+            Back to the list
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('endereco_edit', { 'id': entity.id }) }}">
+            Edit
+        </a>
+    </li>
+    <li>{{ form(delete_form) }}</li>
+</ul>
+{% endblock %}

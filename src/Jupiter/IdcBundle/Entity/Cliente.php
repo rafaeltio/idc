@@ -43,11 +43,9 @@ class Cliente
     private $razaoSocial;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="codEndereco", type="integer")
+     * @ORM\OneToOne(targetEntity="Endereco", mappedBy="cliente")
      */
-    private $codEndereco;
+    private $endereco;
 
     /**
      * @var string
@@ -84,6 +82,18 @@ class Cliente
      */
     private $cnpj;
 
+    /**
+     * @ORM\OneToMany(targetEntity="OrdemServico", mappedBy="cliente")
+     **/
+    private $ordemServico;
+
+    /**
+     * Construtor da classe instanciando $ordemServico como uma coleção
+     */
+    public function __construct()
+    {
+        $this->ordemServico = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
@@ -165,26 +175,26 @@ class Cliente
     }
 
     /**
-     * Set codEndereco
+     * Set endereco
      *
-     * @param integer $codEndereco
+     * @param \stdClass $Endereco
      * @return Cliente
      */
-    public function setCodEndereco($codEndereco)
+    public function setEndereco($endereco)
     {
-        $this->codEndereco = $codEndereco;
+        $this->endereco = $endereco;
 
         return $this;
     }
 
     /**
-     * Get codEndereco
+     * Get endereco
      *
-     * @return integer 
+     * @return \stdClass
      */
-    public function getCodEndereco()
+    public function getEndereco()
     {
-        return $this->codEndereco;
+        return $this->endereco;
     }
 
     /**

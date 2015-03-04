@@ -127,6 +127,174 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
 
         }
 
+        if (0 === strpos($pathinfo, '/cliente')) {
+            // cliente
+            if (rtrim($pathinfo, '/') === '/cliente') {
+                if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
+                    $allow = array_merge($allow, array('GET', 'HEAD'));
+                    goto not_cliente;
+                }
+
+                if (substr($pathinfo, -1) !== '/') {
+                    return $this->redirect($pathinfo.'/', 'cliente');
+                }
+
+                return array (  '_controller' => 'Jupiter\\IdcBundle\\Controller\\ClienteController::indexAction',  '_route' => 'cliente',);
+            }
+            not_cliente:
+
+            // cliente_create
+            if ($pathinfo === '/cliente/') {
+                if ($this->context->getMethod() != 'POST') {
+                    $allow[] = 'POST';
+                    goto not_cliente_create;
+                }
+
+                return array (  '_controller' => 'Jupiter\\IdcBundle\\Controller\\ClienteController::createAction',  '_route' => 'cliente_create',);
+            }
+            not_cliente_create:
+
+            // cliente_new
+            if ($pathinfo === '/cliente/new') {
+                if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
+                    $allow = array_merge($allow, array('GET', 'HEAD'));
+                    goto not_cliente_new;
+                }
+
+                return array (  '_controller' => 'Jupiter\\IdcBundle\\Controller\\ClienteController::newAction',  '_route' => 'cliente_new',);
+            }
+            not_cliente_new:
+
+            // cliente_show
+            if (preg_match('#^/cliente/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+                if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
+                    $allow = array_merge($allow, array('GET', 'HEAD'));
+                    goto not_cliente_show;
+                }
+
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'cliente_show')), array (  '_controller' => 'Jupiter\\IdcBundle\\Controller\\ClienteController::showAction',));
+            }
+            not_cliente_show:
+
+            // cliente_edit
+            if (preg_match('#^/cliente/(?P<id>[^/]++)/edit$#s', $pathinfo, $matches)) {
+                if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
+                    $allow = array_merge($allow, array('GET', 'HEAD'));
+                    goto not_cliente_edit;
+                }
+
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'cliente_edit')), array (  '_controller' => 'Jupiter\\IdcBundle\\Controller\\ClienteController::editAction',));
+            }
+            not_cliente_edit:
+
+            // cliente_update
+            if (preg_match('#^/cliente/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+                if ($this->context->getMethod() != 'PUT') {
+                    $allow[] = 'PUT';
+                    goto not_cliente_update;
+                }
+
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'cliente_update')), array (  '_controller' => 'Jupiter\\IdcBundle\\Controller\\ClienteController::updateAction',));
+            }
+            not_cliente_update:
+
+            // cliente_delete
+            if (preg_match('#^/cliente/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+                if ($this->context->getMethod() != 'DELETE') {
+                    $allow[] = 'DELETE';
+                    goto not_cliente_delete;
+                }
+
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'cliente_delete')), array (  '_controller' => 'Jupiter\\IdcBundle\\Controller\\ClienteController::deleteAction',));
+            }
+            not_cliente_delete:
+
+        }
+
+        if (0 === strpos($pathinfo, '/endereco')) {
+            // endereco
+            if (rtrim($pathinfo, '/') === '/endereco') {
+                if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
+                    $allow = array_merge($allow, array('GET', 'HEAD'));
+                    goto not_endereco;
+                }
+
+                if (substr($pathinfo, -1) !== '/') {
+                    return $this->redirect($pathinfo.'/', 'endereco');
+                }
+
+                return array (  '_controller' => 'Jupiter\\IdcBundle\\Controller\\EnderecoController::indexAction',  '_route' => 'endereco',);
+            }
+            not_endereco:
+
+            // endereco_create
+            if ($pathinfo === '/endereco/') {
+                if ($this->context->getMethod() != 'POST') {
+                    $allow[] = 'POST';
+                    goto not_endereco_create;
+                }
+
+                return array (  '_controller' => 'Jupiter\\IdcBundle\\Controller\\EnderecoController::createAction',  '_route' => 'endereco_create',);
+            }
+            not_endereco_create:
+
+            // endereco_new
+            if ($pathinfo === '/endereco/new') {
+                if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
+                    $allow = array_merge($allow, array('GET', 'HEAD'));
+                    goto not_endereco_new;
+                }
+
+                return array (  '_controller' => 'Jupiter\\IdcBundle\\Controller\\EnderecoController::newAction',  '_route' => 'endereco_new',);
+            }
+            not_endereco_new:
+
+            // endereco_show
+            if (preg_match('#^/endereco/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+                if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
+                    $allow = array_merge($allow, array('GET', 'HEAD'));
+                    goto not_endereco_show;
+                }
+
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'endereco_show')), array (  '_controller' => 'Jupiter\\IdcBundle\\Controller\\EnderecoController::showAction',));
+            }
+            not_endereco_show:
+
+            // endereco_edit
+            if (preg_match('#^/endereco/(?P<id>[^/]++)/edit$#s', $pathinfo, $matches)) {
+                if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
+                    $allow = array_merge($allow, array('GET', 'HEAD'));
+                    goto not_endereco_edit;
+                }
+
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'endereco_edit')), array (  '_controller' => 'Jupiter\\IdcBundle\\Controller\\EnderecoController::editAction',));
+            }
+            not_endereco_edit:
+
+            // endereco_update
+            if (preg_match('#^/endereco/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+                if ($this->context->getMethod() != 'PUT') {
+                    $allow[] = 'PUT';
+                    goto not_endereco_update;
+                }
+
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'endereco_update')), array (  '_controller' => 'Jupiter\\IdcBundle\\Controller\\EnderecoController::updateAction',));
+            }
+            not_endereco_update:
+
+            // endereco_delete
+            if (preg_match('#^/endereco/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+                if ($this->context->getMethod() != 'DELETE') {
+                    $allow[] = 'DELETE';
+                    goto not_endereco_delete;
+                }
+
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'endereco_delete')), array (  '_controller' => 'Jupiter\\IdcBundle\\Controller\\EnderecoController::deleteAction',));
+            }
+            not_endereco_delete:
+
+        }
+
         // homepage
         if ($pathinfo === '/app/example') {
             return array (  '_controller' => 'AppBundle\\Controller\\DefaultController::indexAction',  '_route' => 'homepage',);

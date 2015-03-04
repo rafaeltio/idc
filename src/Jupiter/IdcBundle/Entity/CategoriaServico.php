@@ -28,7 +28,16 @@ class CategoriaServico
      */
     private $nome;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Servico", mappedBy="categoria")
+     **/
+    private $servico;
 
+
+    public function __construct() {
+        $this->servico = new ArrayCollection();
+    }
+    
     /**
      * Get id
      *

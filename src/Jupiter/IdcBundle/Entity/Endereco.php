@@ -22,6 +22,12 @@ class Endereco
     private $id;
 
     /**
+     * @ORM\OneToOne(targetEntity="Cliente", inversedBy="endereco")
+     * @ORM\JoinColumn(name="cliente_id", referencedColumnName="id")
+    **/
+    private $cliente;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="tipo", type="string", length=255)
@@ -43,18 +49,22 @@ class Endereco
     private $cep;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="codBairro", type="integer")
-     */
-    private $codBairro;
+     * @ORM\ManyToOne(targetEntity="Bairro")
+     * @ORM\JoinColumn(name="bairro_id", referencedColumnName="id")
+    **/
+    private $bairro;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="codCidade", type="integer")
-     */
-    private $codCidade;
+     * @ORM\OneToOne(targetEntity="Cidade")
+     * @ORM\JoinColumn(name="cidade_id", referencedColumnName="id")
+    **/
+    private $cidade;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Estado")
+     * @ORM\JoinColumn(name="estado_id", referencedColumnName="id")
+    **/
+    private $estado;
 
     /**
      * @var string

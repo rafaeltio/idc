@@ -22,25 +22,28 @@ class OrdemServico
     private $id;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="codCliente", type="integer")
-     */
-    private $codCliente;
+     * @ORM\ManyToOne(targetEntity="Cliente", inversedBy="ordemServico")
+     * @ORM\JoinTable(name="ordens_clientes",
+     *      joinColumns={@ORM\JoinColumn(name="ordem_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="cliente_id", referencedColumnName="id")}
+     *      )
+     **/
+    private $cliente;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="codCestaServico", type="integer")
-     */
-    private $codCestaServico;
+     * @ORM\ManyToMany(targetEntity="Servico")
+     * @ORM\JoinTable(name="ordens_servicos",
+     *      joinColumns={@ORM\JoinColumn(name="ordem_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="servico_id", referencedColumnName="id")}
+     *      )
+     **/
+    private $servico;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="codUsuario", type="integer")
-     */
-    private $codUsuario;
+     * @ORM\OneToOne(targetEntity="Usuario")
+     * @ORM\JoinColumn(name="usuario_id", referencedColumnName="id")
+     **/
+    private $usuario;
 
     /**
      * @var \DateTime
@@ -77,6 +80,20 @@ class OrdemServico
      */
     private $previsaoEntrega;
 
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="validade", type="date")
+     */
+    private $validade;
+
+    /**
+     * Construtor da classe instanciando $produto como uma coleção
+     */
+    public function __construct()
+    {
+        $this->servico = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
@@ -270,5 +287,28 @@ class OrdemServico
     public function getPrevisaoEntrega()
     {
         return $this->previsaoEntrega;
+    }
+
+    /**
+     * Set validade
+     *
+     * @param \DateTime $validade
+     * @return OrdemServico
+     */
+    public function setValidade($validade)
+    {
+        $this->validade = $validade;
+
+        return $this;
+    }
+
+    /**
+     * Get validade
+     *
+     * @return \DateTime 
+     */
+    public function getValidade()
+    {
+        return $this->validade;
     }
 }

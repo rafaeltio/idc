@@ -29,11 +29,10 @@ class Servico
     private $nome;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="codCategoria", type="integer")
-     */
-    private $codCategoria;
+     * @ORM\ManyToOne(targetEntity="CategoriaServico", inversedBy="servico")
+     * @ORM\JoinColumn(name="CategoriaServico_id", referencedColumnName="id")
+     **/
+    private $categoria;
 
     /**
      * @var float

@@ -29,11 +29,10 @@ class Cidade
     private $nome;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="uf", type="string", length=255)
-     */
-    private $uf;
+     * @ORM\ManyToOne(targetEntity="Estado")
+     * @ORM\JoinColumn(name="estado_id", referencedColumnName="id")
+    **/
+    private $estado;
 
 
     /**

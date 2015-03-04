@@ -28,7 +28,6 @@ class Bairro
      */
     private $nome;
 
-
     /**
      * Get id
      *
