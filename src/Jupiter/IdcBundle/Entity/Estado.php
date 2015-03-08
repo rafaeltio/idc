@@ -29,12 +29,6 @@ class Estado
     private $nome;
 
     /**
-     * @ORM\OneToOne(targetEntity="Cidade")
-     * @ORM\JoinColumn(name="capital_id", referencedColumnName="id")
-     **/
-    private $capital;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="uf", type="string", length=2)
@@ -119,5 +113,10 @@ class Estado
     public function getUf()
     {
         return $this->uf;
+    }
+
+    public function __toString()
+    {
+        return $this->nome;
     }
 }

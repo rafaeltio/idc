@@ -221,4 +221,101 @@ class Endereco
     {
         return $this->complemento;
     }
+
+
+    /**
+     * Set cliente
+     *
+     * @param \stdClass $Cliente
+     * @return Endereco
+     */
+    public function setCliente($cliente)
+    {
+        $this->cliente = $cliente;
+
+        return $this;
+    }
+
+    /**
+     * Get cliente
+     *
+     * @return \stdClass
+     */
+    public function getCliente()
+    {
+        return $this->cliente;
+    }
+
+
+    /**
+     * Set bairro
+     *
+     * @param \stdClass $Bairro
+     * @return Endereco
+     */
+    public function setBairro($bairro)
+    {
+        $this->bairro = $bairro;
+
+        return $this;
+    }
+
+    /**
+     * Get bairro
+     *
+     * @return \stdClass
+     */
+    public function getBairro()
+    {
+        return $this->bairro;
+    }
+
+
+    /**
+     * Set cidade
+     *
+     * @param \stdClass $Cidade
+     * @return Endereco
+     */
+    public function setCidade($cidade)
+    {
+        $this->cidade = $cidade;
+
+        return $this;
+    }
+
+    /**
+     * Get cidade
+     *
+     * @return \stdClass
+     */
+    public function getCidade()
+    {
+        return $this->cidade;
+    }
+
+
+    /**
+     * Set estado
+     *
+     * @param \stdClass $Estado
+     * @return Endereco
+     */
+    public function setEstado($estado)
+    {
+        $this->estado = $estado;
+
+        return $this;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return \stdClass
+     */
+    public function getEstado()
+    {
+        return $this->estado;
+    }
+
 }

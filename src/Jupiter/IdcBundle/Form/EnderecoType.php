@@ -19,7 +19,6 @@ class EnderecoType extends AbstractType
             ->add('logradouro')
             ->add('cep')
             ->add('complemento')
-            ->add('cliente')
             ->add('bairro')
             ->add('cidade')
             ->add('estado')

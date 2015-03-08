@@ -311,4 +311,9 @@ class Cliente
     {
         return $this->cnpj;
     }
+
+    public function __toString(){
+        return "Nome: ".$this->nome;
+    }
+
 }

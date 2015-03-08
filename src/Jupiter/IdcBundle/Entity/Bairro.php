@@ -60,4 +60,9 @@ class Bairro
     {
         return $this->nome;
     }
+
+    public function __toString()
+    {
+        return $this->nome;
+    }
 }

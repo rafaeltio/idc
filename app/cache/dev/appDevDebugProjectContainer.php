@@ -45,8 +45,22 @@ class appDevDebugProjectContainer extends Container
             'assetic.cache' => 'getAssetic_CacheService',
             'assetic.controller' => 'getAssetic_ControllerService',
             'assetic.filter.cssrewrite' => 'getAssetic_Filter_CssrewriteService',
+            'assetic.filter.less' => 'getAssetic_Filter_LessService',
             'assetic.filter_manager' => 'getAssetic_FilterManagerService',
             'assetic.request_listener' => 'getAssetic_RequestListenerService',
+            'braincrafted_bootstrap.flash' => 'getBraincraftedBootstrap_FlashService',
+            'braincrafted_bootstrap.form.extension.form_action_button' => 'getBraincraftedBootstrap_Form_Extension_FormActionButtonService',
+            'braincrafted_bootstrap.form.extension.input_group_button' => 'getBraincraftedBootstrap_Form_Extension_InputGroupButtonService',
+            'braincrafted_bootstrap.form.extension.static_control' => 'getBraincraftedBootstrap_Form_Extension_StaticControlService',
+            'braincrafted_bootstrap.form.extension.typesetter_extension' => 'getBraincraftedBootstrap_Form_Extension_TypesetterExtensionService',
+            'braincrafted_bootstrap.form.type.collection' => 'getBraincraftedBootstrap_Form_Type_CollectionService',
+            'braincrafted_bootstrap.form.type.form_actions' => 'getBraincraftedBootstrap_Form_Type_FormActionsService',
+            'braincrafted_bootstrap.form.type.form_control_static' => 'getBraincraftedBootstrap_Form_Type_FormControlStaticService',
+            'braincrafted_bootstrap.form.type.money' => 'getBraincraftedBootstrap_Form_Type_MoneyService',
+            'braincrafted_bootstrap.twig.badge_extension' => 'getBraincraftedBootstrap_Twig_BadgeExtensionService',
+            'braincrafted_bootstrap.twig.form_extension' => 'getBraincraftedBootstrap_Twig_FormExtensionService',
+            'braincrafted_bootstrap.twig.icon_extension' => 'getBraincraftedBootstrap_Twig_IconExtensionService',
+            'braincrafted_bootstrap.twig.label_extension' => 'getBraincraftedBootstrap_Twig_LabelExtensionService',
             'cache_clearer' => 'getCacheClearerService',
             'cache_warmer' => 'getCacheWarmerService',
             'controller_name_converter' => 'getControllerNameConverterService',
@@ -313,8 +327,9 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getAssetic_AssetManagerService()
     {
-        $this->services['assetic.asset_manager'] = $instance = new \Assetic\Factory\LazyAssetManager($this->get('assetic.asset_factory'), array('twig' => new \Assetic\Factory\Loader\CachedFormulaLoader(new \Assetic\Extension\Twig\TwigFormulaLoader($this->get('twig'), $this->get('monolog.logger.assetic', ContainerInterface::NULL_ON_INVALID_REFERENCE)), new \Assetic\Cache\ConfigCache((__DIR__.'/assetic/config')), true)));
+        $this->services['assetic.asset_manager'] = $instance = new \Assetic\Factory\LazyAssetManager($this->get('assetic.asset_factory'), array('config' => new \Symfony\Bundle\AsseticBundle\Factory\Loader\ConfigurationLoader(), 'twig' => new \Assetic\Factory\Loader\CachedFormulaLoader(new \Assetic\Extension\Twig\TwigFormulaLoader($this->get('twig'), $this->get('monolog.logger.assetic', ContainerInterface::NULL_ON_INVALID_REFERENCE)), new \Assetic\Cache\ConfigCache((__DIR__.'/assetic/config')), true)));
 
+        $instance->addResource(new \Symfony\Bundle\AsseticBundle\Factory\Resource\ConfigurationResource(array('bootstrap_css' => array(0 => array(0 => ($this->targetDirs[2].'/../vendor/twbs/bootstrap/less/bootstrap.less'), 1 => ($this->targetDirs[3].'/vendor/braincrafted/bootstrap-bundle/Braincrafted/Bundle/BootstrapBundle/DependencyInjection/../Resources/less/form.less')), 1 => array(0 => 'less'), 2 => array('output' => 'css/bootstrap.css')), 'bootstrap_js' => array(0 => array(0 => ($this->targetDirs[2].'/../vendor/twbs/bootstrap/js/transition.js'), 1 => ($this->targetDirs[2].'/../vendor/twbs/bootstrap/js/alert.js'), 2 => ($this->targetDirs[2].'/../vendor/twbs/bootstrap/js/button.js'), 3 => ($this->targetDirs[2].'/../vendor/twbs/bootstrap/js/carousel.js'), 4 => ($this->targetDirs[2].'/../vendor/twbs/bootstrap/js/collapse.js'), 5 => ($this->targetDirs[2].'/../vendor/twbs/bootstrap/js/dropdown.js'), 6 => ($this->targetDirs[2].'/../vendor/twbs/bootstrap/js/modal.js'), 7 => ($this->targetDirs[2].'/../vendor/twbs/bootstrap/js/tooltip.js'), 8 => ($this->targetDirs[2].'/../vendor/twbs/bootstrap/js/popover.js'), 9 => ($this->targetDirs[2].'/../vendor/twbs/bootstrap/js/scrollspy.js'), 10 => ($this->targetDirs[2].'/../vendor/twbs/bootstrap/js/tab.js'), 11 => ($this->targetDirs[2].'/../vendor/twbs/bootstrap/js/affix.js'), 12 => ($this->targetDirs[3].'/vendor/braincrafted/bootstrap-bundle/Braincrafted/Bundle/BootstrapBundle/DependencyInjection/../Resources/js/bc-bootstrap-collection.js')), 1 => array(), 2 => array('output' => 'js/bootstrap.js')), 'jquery' => array(0 => array(0 => ($this->targetDirs[2].'/../vendor/jquery/jquery/jquery-1.11.1.js')), 1 => array(), 2 => array('output' => 'js/jquery.js')))), 'config');
         $instance->addResource(new \Symfony\Bundle\AsseticBundle\Factory\Resource\DirectoryResource($this->get('templating.loader'), '', ($this->targetDirs[2].'/Resources/views'), '/\\.[^.]+\\.twig$/'), 'twig');
 
         return $instance;
@@ -344,6 +359,25 @@ class appDevDebugProjectContainer extends Container
     }
 
     /**
+     * Gets the 'assetic.filter.less' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return \Assetic\Filter\LessFilter A Assetic\Filter\LessFilter instance.
+     */
+    protected function getAssetic_Filter_LessService()
+    {
+        $this->services['assetic.filter.less'] = $instance = new \Assetic\Filter\LessFilter('/usr/local/bin/node', array(0 => '/usr/local/lib/node_modules'));
+
+        $instance->setTimeout(NULL);
+        $instance->setCompress(NULL);
+        $instance->setLoadPaths(array());
+
+        return $instance;
+    }
+
+    /**
      * Gets the 'assetic.filter_manager' service.
      *
      * This service is shared.
@@ -353,7 +387,7 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getAssetic_FilterManagerService()
     {
-        return $this->services['assetic.filter_manager'] = new \Symfony\Bundle\AsseticBundle\FilterManager($this, array('cssrewrite' => 'assetic.filter.cssrewrite'));
+        return $this->services['assetic.filter_manager'] = new \Symfony\Bundle\AsseticBundle\FilterManager($this, array('less' => 'assetic.filter.less', 'cssrewrite' => 'assetic.filter.cssrewrite'));
     }
 
     /**
@@ -367,6 +401,175 @@ class appDevDebugProjectContainer extends Container
     protected function getAssetic_RequestListenerService()
     {
         return $this->services['assetic.request_listener'] = new \Symfony\Bundle\AsseticBundle\EventListener\RequestListener();
+    }
+
+    /**
+     * Gets the 'braincrafted_bootstrap.flash' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return \Braincrafted\Bundle\BootstrapBundle\Session\FlashMessage A Braincrafted\Bundle\BootstrapBundle\Session\FlashMessage instance.
+     */
+    protected function getBraincraftedBootstrap_FlashService()
+    {
+        return $this->services['braincrafted_bootstrap.flash'] = new \Braincrafted\Bundle\BootstrapBundle\Session\FlashMessage($this->get('session'));
+    }
+
+    /**
+     * Gets the 'braincrafted_bootstrap.form.extension.form_action_button' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return \Braincrafted\Bundle\BootstrapBundle\Form\Extension\ButtonTypeExtension A Braincrafted\Bundle\BootstrapBundle\Form\Extension\ButtonTypeExtension instance.
+     */
+    protected function getBraincraftedBootstrap_Form_Extension_FormActionButtonService()
+    {
+        return $this->services['braincrafted_bootstrap.form.extension.form_action_button'] = new \Braincrafted\Bundle\BootstrapBundle\Form\Extension\ButtonTypeExtension();
+    }
+
+    /**
+     * Gets the 'braincrafted_bootstrap.form.extension.input_group_button' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return \Braincrafted\Bundle\BootstrapBundle\Form\Extension\InputGroupButtonExtension A Braincrafted\Bundle\BootstrapBundle\Form\Extension\InputGroupButtonExtension instance.
+     */
+    protected function getBraincraftedBootstrap_Form_Extension_InputGroupButtonService()
+    {
+        return $this->services['braincrafted_bootstrap.form.extension.input_group_button'] = new \Braincrafted\Bundle\BootstrapBundle\Form\Extension\InputGroupButtonExtension();
+    }
+
+    /**
+     * Gets the 'braincrafted_bootstrap.form.extension.static_control' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return \Braincrafted\Bundle\BootstrapBundle\Form\Extension\StaticControlExtension A Braincrafted\Bundle\BootstrapBundle\Form\Extension\StaticControlExtension instance.
+     */
+    protected function getBraincraftedBootstrap_Form_Extension_StaticControlService()
+    {
+        return $this->services['braincrafted_bootstrap.form.extension.static_control'] = new \Braincrafted\Bundle\BootstrapBundle\Form\Extension\StaticControlExtension();
+    }
+
+    /**
+     * Gets the 'braincrafted_bootstrap.form.extension.typesetter_extension' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return \Braincrafted\Bundle\BootstrapBundle\Form\Extension\TypeSetterExtension A Braincrafted\Bundle\BootstrapBundle\Form\Extension\TypeSetterExtension instance.
+     */
+    protected function getBraincraftedBootstrap_Form_Extension_TypesetterExtensionService()
+    {
+        return $this->services['braincrafted_bootstrap.form.extension.typesetter_extension'] = new \Braincrafted\Bundle\BootstrapBundle\Form\Extension\TypeSetterExtension();
+    }
+
+    /**
+     * Gets the 'braincrafted_bootstrap.form.type.collection' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return \Braincrafted\Bundle\BootstrapBundle\Form\Type\BootstrapCollectionType A Braincrafted\Bundle\BootstrapBundle\Form\Type\BootstrapCollectionType instance.
+     */
+    protected function getBraincraftedBootstrap_Form_Type_CollectionService()
+    {
+        return $this->services['braincrafted_bootstrap.form.type.collection'] = new \Braincrafted\Bundle\BootstrapBundle\Form\Type\BootstrapCollectionType();
+    }
+
+    /**
+     * Gets the 'braincrafted_bootstrap.form.type.form_actions' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return \Braincrafted\Bundle\BootstrapBundle\Form\Type\FormActionsType A Braincrafted\Bundle\BootstrapBundle\Form\Type\FormActionsType instance.
+     */
+    protected function getBraincraftedBootstrap_Form_Type_FormActionsService()
+    {
+        return $this->services['braincrafted_bootstrap.form.type.form_actions'] = new \Braincrafted\Bundle\BootstrapBundle\Form\Type\FormActionsType();
+    }
+
+    /**
+     * Gets the 'braincrafted_bootstrap.form.type.form_control_static' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return \Braincrafted\Bundle\BootstrapBundle\Form\Type\FormStaticControlType A Braincrafted\Bundle\BootstrapBundle\Form\Type\FormStaticControlType instance.
+     */
+    protected function getBraincraftedBootstrap_Form_Type_FormControlStaticService()
+    {
+        return $this->services['braincrafted_bootstrap.form.type.form_control_static'] = new \Braincrafted\Bundle\BootstrapBundle\Form\Type\FormStaticControlType();
+    }
+
+    /**
+     * Gets the 'braincrafted_bootstrap.form.type.money' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return \Braincrafted\Bundle\BootstrapBundle\Form\Type\MoneyType A Braincrafted\Bundle\BootstrapBundle\Form\Type\MoneyType instance.
+     */
+    protected function getBraincraftedBootstrap_Form_Type_MoneyService()
+    {
+        return $this->services['braincrafted_bootstrap.form.type.money'] = new \Braincrafted\Bundle\BootstrapBundle\Form\Type\MoneyType();
+    }
+
+    /**
+     * Gets the 'braincrafted_bootstrap.twig.badge_extension' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return \Braincrafted\Bundle\BootstrapBundle\Twig\BootstrapBadgeExtension A Braincrafted\Bundle\BootstrapBundle\Twig\BootstrapBadgeExtension instance.
+     */
+    protected function getBraincraftedBootstrap_Twig_BadgeExtensionService()
+    {
+        return $this->services['braincrafted_bootstrap.twig.badge_extension'] = new \Braincrafted\Bundle\BootstrapBundle\Twig\BootstrapBadgeExtension();
+    }
+
+    /**
+     * Gets the 'braincrafted_bootstrap.twig.form_extension' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return \Braincrafted\Bundle\BootstrapBundle\Twig\BootstrapFormExtension A Braincrafted\Bundle\BootstrapBundle\Twig\BootstrapFormExtension instance.
+     */
+    protected function getBraincraftedBootstrap_Twig_FormExtensionService()
+    {
+        return $this->services['braincrafted_bootstrap.twig.form_extension'] = new \Braincrafted\Bundle\BootstrapBundle\Twig\BootstrapFormExtension();
+    }
+
+    /**
+     * Gets the 'braincrafted_bootstrap.twig.icon_extension' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return \Braincrafted\Bundle\BootstrapBundle\Twig\BootstrapIconExtension A Braincrafted\Bundle\BootstrapBundle\Twig\BootstrapIconExtension instance.
+     */
+    protected function getBraincraftedBootstrap_Twig_IconExtensionService()
+    {
+        return $this->services['braincrafted_bootstrap.twig.icon_extension'] = new \Braincrafted\Bundle\BootstrapBundle\Twig\BootstrapIconExtension('glyphicon', 'span');
+    }
+
+    /**
+     * Gets the 'braincrafted_bootstrap.twig.label_extension' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return \Braincrafted\Bundle\BootstrapBundle\Twig\BootstrapLabelExtension A Braincrafted\Bundle\BootstrapBundle\Twig\BootstrapLabelExtension instance.
+     */
+    protected function getBraincraftedBootstrap_Twig_LabelExtensionService()
+    {
+        return $this->services['braincrafted_bootstrap.twig.label_extension'] = new \Braincrafted\Bundle\BootstrapBundle\Twig\BootstrapLabelExtension();
     }
 
     /**
@@ -822,7 +1025,7 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getForm_RegistryService()
     {
-        return $this->services['form.registry'] = new \Symfony\Component\Form\FormRegistry(array(0 => new \Symfony\Component\Form\Extension\DependencyInjection\DependencyInjectionExtension($this, array('form' => 'form.type.form', 'birthday' => 'form.type.birthday', 'checkbox' => 'form.type.checkbox', 'choice' => 'form.type.choice', 'collection' => 'form.type.collection', 'country' => 'form.type.country', 'date' => 'form.type.date', 'datetime' => 'form.type.datetime', 'email' => 'form.type.email', 'file' => 'form.type.file', 'hidden' => 'form.type.hidden', 'integer' => 'form.type.integer', 'language' => 'form.type.language', 'locale' => 'form.type.locale', 'money' => 'form.type.money', 'number' => 'form.type.number', 'password' => 'form.type.password', 'percent' => 'form.type.percent', 'radio' => 'form.type.radio', 'repeated' => 'form.type.repeated', 'search' => 'form.type.search', 'textarea' => 'form.type.textarea', 'text' => 'form.type.text', 'time' => 'form.type.time', 'timezone' => 'form.type.timezone', 'url' => 'form.type.url', 'button' => 'form.type.button', 'submit' => 'form.type.submit', 'reset' => 'form.type.reset', 'currency' => 'form.type.currency', 'entity' => 'form.type.entity'), array('form' => array(0 => 'form.type_extension.form.http_foundation', 1 => 'form.type_extension.form.validator', 2 => 'form.type_extension.csrf', 3 => 'form.type_extension.form.data_collector'), 'repeated' => array(0 => 'form.type_extension.repeated.validator'), 'submit' => array(0 => 'form.type_extension.submit.validator')), array(0 => 'form.type_guesser.validator', 1 => 'form.type_guesser.doctrine'))), $this->get('form.resolved_type_factory'));
+        return $this->services['form.registry'] = new \Symfony\Component\Form\FormRegistry(array(0 => new \Symfony\Component\Form\Extension\DependencyInjection\DependencyInjectionExtension($this, array('form' => 'form.type.form', 'birthday' => 'form.type.birthday', 'checkbox' => 'form.type.checkbox', 'choice' => 'form.type.choice', 'collection' => 'form.type.collection', 'country' => 'form.type.country', 'date' => 'form.type.date', 'datetime' => 'form.type.datetime', 'email' => 'form.type.email', 'file' => 'form.type.file', 'hidden' => 'form.type.hidden', 'integer' => 'form.type.integer', 'language' => 'form.type.language', 'locale' => 'form.type.locale', 'money' => 'braincrafted_bootstrap.form.type.money', 'number' => 'form.type.number', 'password' => 'form.type.password', 'percent' => 'form.type.percent', 'radio' => 'form.type.radio', 'repeated' => 'form.type.repeated', 'search' => 'form.type.search', 'textarea' => 'form.type.textarea', 'text' => 'form.type.text', 'time' => 'form.type.time', 'timezone' => 'form.type.timezone', 'url' => 'form.type.url', 'button' => 'form.type.button', 'submit' => 'form.type.submit', 'reset' => 'form.type.reset', 'currency' => 'form.type.currency', 'entity' => 'form.type.entity', 'bootstrap_collection' => 'braincrafted_bootstrap.form.type.collection', 'form_actions' => 'braincrafted_bootstrap.form.type.form_actions', 'bs_static' => 'braincrafted_bootstrap.form.type.form_control_static'), array('form' => array(0 => 'form.type_extension.form.http_foundation', 1 => 'form.type_extension.form.validator', 2 => 'form.type_extension.csrf', 3 => 'form.type_extension.form.data_collector', 4 => 'braincrafted_bootstrap.form.extension.typesetter_extension', 5 => 'braincrafted_bootstrap.form.extension.static_control'), 'repeated' => array(0 => 'form.type_extension.repeated.validator'), 'submit' => array(0 => 'form.type_extension.submit.validator'), 'button' => array(0 => 'braincrafted_bootstrap.form.extension.form_action_button'), 'text' => array(0 => 'braincrafted_bootstrap.form.extension.input_group_button')), array(0 => 'form.type_guesser.validator', 1 => 'form.type_guesser.doctrine'))), $this->get('form.resolved_type_factory'));
     }
 
     /**
@@ -2005,7 +2208,7 @@ class appDevDebugProjectContainer extends Container
 
         $e = new \Symfony\Component\Security\Http\AccessMap();
 
-        return $this->services['security.firewall.map.context.default'] = new \Symfony\Bundle\SecurityBundle\Security\FirewallContext(array(0 => new \Symfony\Component\Security\Http\Firewall\ChannelListener($e, new \Symfony\Component\Security\Http\EntryPoint\RetryAuthenticationEntryPoint(80, 443), $a), 1 => new \Symfony\Component\Security\Http\Firewall\ContextListener($b, array(0 => new \Symfony\Component\Security\Core\User\InMemoryUserProvider()), 'default', $a, $this->get('debug.event_dispatcher', ContainerInterface::NULL_ON_INVALID_REFERENCE)), 2 => new \Symfony\Component\Security\Http\Firewall\AnonymousAuthenticationListener($b, '54f744d9699c9', $a, $c), 3 => new \Symfony\Component\Security\Http\Firewall\AccessListener($b, $this->get('security.access.decision_manager'), $e, $c)), new \Symfony\Component\Security\Http\Firewall\ExceptionListener($b, $this->get('security.authentication.trust_resolver'), new \Symfony\Component\Security\Http\HttpUtils($d, $d), 'default', NULL, NULL, NULL, $a));
+        return $this->services['security.firewall.map.context.default'] = new \Symfony\Bundle\SecurityBundle\Security\FirewallContext(array(0 => new \Symfony\Component\Security\Http\Firewall\ChannelListener($e, new \Symfony\Component\Security\Http\EntryPoint\RetryAuthenticationEntryPoint(80, 443), $a), 1 => new \Symfony\Component\Security\Http\Firewall\ContextListener($b, array(0 => new \Symfony\Component\Security\Core\User\InMemoryUserProvider()), 'default', $a, $this->get('debug.event_dispatcher', ContainerInterface::NULL_ON_INVALID_REFERENCE)), 2 => new \Symfony\Component\Security\Http\Firewall\AnonymousAuthenticationListener($b, '54fb921433c29', $a, $c), 3 => new \Symfony\Component\Security\Http\Firewall\AccessListener($b, $this->get('security.access.decision_manager'), $e, $c)), new \Symfony\Component\Security\Http\Firewall\ExceptionListener($b, $this->get('security.authentication.trust_resolver'), new \Symfony\Component\Security\Http\HttpUtils($d, $d), 'default', NULL, NULL, NULL, $a));
     }
 
     /**
@@ -3100,7 +3303,7 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getTwigService()
     {
-        $this->services['twig'] = $instance = new \Twig_Environment($this->get('twig.loader'), array('debug' => true, 'strict_variables' => true, 'exception_controller' => 'twig.controller.exception:showAction', 'form_themes' => array(0 => 'form_div_layout.html.twig'), 'autoescape' => array(0 => 'Symfony\\Bundle\\TwigBundle\\TwigDefaultEscapingStrategy', 1 => 'guess'), 'cache' => (__DIR__.'/twig'), 'charset' => 'UTF-8', 'paths' => array()));
+        $this->services['twig'] = $instance = new \Twig_Environment($this->get('twig.loader'), array('debug' => true, 'strict_variables' => true, 'exception_controller' => 'twig.controller.exception:showAction', 'form_themes' => array(0 => 'form_div_layout.html.twig', 1 => 'BraincraftedBootstrapBundle:Form:bootstrap.html.twig'), 'autoescape' => array(0 => 'Symfony\\Bundle\\TwigBundle\\TwigDefaultEscapingStrategy', 1 => 'guess'), 'cache' => (__DIR__.'/twig'), 'charset' => 'UTF-8', 'paths' => array()));
 
         $instance->addExtension(new \Symfony\Bundle\SecurityBundle\Twig\Extension\LogoutUrlExtension($this->get('templating.helper.logout_url')));
         $instance->addExtension(new \Symfony\Bridge\Twig\Extension\SecurityExtension($this->get('security.context', ContainerInterface::NULL_ON_INVALID_REFERENCE)));
@@ -3113,10 +3316,14 @@ class appDevDebugProjectContainer extends Container
         $instance->addExtension(new \Symfony\Bridge\Twig\Extension\StopwatchExtension($this->get('debug.stopwatch', ContainerInterface::NULL_ON_INVALID_REFERENCE), true));
         $instance->addExtension(new \Symfony\Bridge\Twig\Extension\ExpressionExtension());
         $instance->addExtension(new \Symfony\Bridge\Twig\Extension\HttpKernelExtension($this->get('fragment.handler')));
-        $instance->addExtension(new \Symfony\Bridge\Twig\Extension\FormExtension(new \Symfony\Bridge\Twig\Form\TwigRenderer(new \Symfony\Bridge\Twig\Form\TwigRendererEngine(array(0 => 'form_div_layout.html.twig')), $this->get('form.csrf_provider', ContainerInterface::NULL_ON_INVALID_REFERENCE))));
+        $instance->addExtension(new \Symfony\Bridge\Twig\Extension\FormExtension(new \Symfony\Bridge\Twig\Form\TwigRenderer(new \Symfony\Bridge\Twig\Form\TwigRendererEngine(array(0 => 'form_div_layout.html.twig', 1 => 'BraincraftedBootstrapBundle:Form:bootstrap.html.twig')), $this->get('form.csrf_provider', ContainerInterface::NULL_ON_INVALID_REFERENCE))));
         $instance->addExtension(new \Twig_Extension_Debug());
         $instance->addExtension(new \Symfony\Bundle\AsseticBundle\Twig\AsseticExtension($this->get('assetic.asset_factory'), $this->get('templating.name_parser'), true, array(), array(), new \Symfony\Bundle\AsseticBundle\DefaultValueSupplier($this)));
         $instance->addExtension(new \Doctrine\Bundle\DoctrineBundle\Twig\DoctrineExtension());
+        $instance->addExtension($this->get('braincrafted_bootstrap.twig.icon_extension'));
+        $instance->addExtension($this->get('braincrafted_bootstrap.twig.label_extension'));
+        $instance->addExtension($this->get('braincrafted_bootstrap.twig.badge_extension'));
+        $instance->addExtension($this->get('braincrafted_bootstrap.twig.form_extension'));
         $instance->addExtension(new \Symfony\Bridge\Twig\Extension\DumpExtension($this->get('var_dumper.cloner')));
         $instance->addExtension(new \Symfony\Bundle\WebProfilerBundle\Twig\WebProfilerExtension());
         $instance->addGlobal('app', $this->get('templating.globals'));
@@ -3181,6 +3388,7 @@ class appDevDebugProjectContainer extends Container
         $instance->addPath(($this->targetDirs[3].'/vendor/symfony/swiftmailer-bundle/Resources/views'), 'Swiftmailer');
         $instance->addPath(($this->targetDirs[3].'/vendor/doctrine/doctrine-bundle/Resources/views'), 'Doctrine');
         $instance->addPath(($this->targetDirs[3].'/src/Jupiter/IdcBundle/Resources/views'), 'JupiterIdc');
+        $instance->addPath(($this->targetDirs[3].'/vendor/braincrafted/bootstrap-bundle/Braincrafted/Bundle/BootstrapBundle/Resources/views'), 'BraincraftedBootstrap');
         $instance->addPath(($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Bundle/DebugBundle/Resources/views'), 'Debug');
         $instance->addPath(($this->targetDirs[3].'/vendor/symfony/symfony/src/Symfony/Bundle/WebProfilerBundle/Resources/views'), 'WebProfiler');
         $instance->addPath(($this->targetDirs[3].'/vendor/sensio/distribution-bundle/Sensio/Bundle/DistributionBundle/Resources/views'), 'SensioDistribution');
@@ -3365,6 +3573,7 @@ class appDevDebugProjectContainer extends Container
     {
         $this->services['assetic.asset_factory'] = $instance = new \Symfony\Bundle\AsseticBundle\Factory\AssetFactory($this->get('kernel'), $this, $this->getParameterBag(), ($this->targetDirs[2].'/../web'), true);
 
+        $instance->addWorker(new \Assetic\Factory\Worker\EnsureFilterWorker('/\\.less$/', $this->get('assetic.filter.less')));
         $instance->addWorker(new \Symfony\Bundle\AsseticBundle\Factory\Worker\UseControllerWorker());
 
         return $instance;
@@ -3472,7 +3681,7 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getSecurity_Authentication_ManagerService()
     {
-        $this->services['security.authentication.manager'] = $instance = new \Symfony\Component\Security\Core\Authentication\AuthenticationProviderManager(array(0 => new \Symfony\Component\Security\Core\Authentication\Provider\AnonymousAuthenticationProvider('54f744d9699c9')), true);
+        $this->services['security.authentication.manager'] = $instance = new \Symfony\Component\Security\Core\Authentication\AuthenticationProviderManager(array(0 => new \Symfony\Component\Security\Core\Authentication\Provider\AnonymousAuthenticationProvider('54fb921433c29')), true);
 
         $instance->setEventDispatcher($this->get('debug.event_dispatcher'));
 
@@ -3650,6 +3859,7 @@ class appDevDebugProjectContainer extends Container
                 'SensioFrameworkExtraBundle' => 'Sensio\\Bundle\\FrameworkExtraBundle\\SensioFrameworkExtraBundle',
                 'AppBundle' => 'AppBundle\\AppBundle',
                 'JupiterIdcBundle' => 'Jupiter\\IdcBundle\\JupiterIdcBundle',
+                'BraincraftedBootstrapBundle' => 'Braincrafted\\Bundle\\BootstrapBundle\\BraincraftedBootstrapBundle',
                 'DebugBundle' => 'Symfony\\Bundle\\DebugBundle\\DebugBundle',
                 'WebProfilerBundle' => 'Symfony\\Bundle\\WebProfilerBundle\\WebProfilerBundle',
                 'SensioDistributionBundle' => 'Sensio\\Bundle\\DistributionBundle\\SensioDistributionBundle',
@@ -3953,6 +4163,7 @@ class appDevDebugProjectContainer extends Container
             'twig.exception_listener.controller' => 'twig.controller.exception:showAction',
             'twig.form.resources' => array(
                 0 => 'form_div_layout.html.twig',
+                1 => 'BraincraftedBootstrapBundle:Form:bootstrap.html.twig',
             ),
             'debug.templating.engine.twig.class' => 'Symfony\\Bundle\\TwigBundle\\Debug\\TimedTwigEngine',
             'twig.options' => array(
@@ -3961,6 +4172,7 @@ class appDevDebugProjectContainer extends Container
                 'exception_controller' => 'twig.controller.exception:showAction',
                 'form_themes' => array(
                     0 => 'form_div_layout.html.twig',
+                    1 => 'BraincraftedBootstrapBundle:Form:bootstrap.html.twig',
                 ),
                 'autoescape' => array(
                     0 => 'Symfony\\Bundle\\TwigBundle\\TwigDefaultEscapingStrategy',
@@ -4099,10 +4311,20 @@ class appDevDebugProjectContainer extends Container
             'assetic.variables' => array(
 
             ),
-            'assetic.java.bin' => '/usr/lib/jvm/jdk1.8.0_05/bin/java',
+            'assetic.java.bin' => '/usr/bin/java',
             'assetic.node.bin' => '/usr/local/bin/node',
             'assetic.ruby.bin' => '/usr/bin/ruby',
             'assetic.sass.bin' => '/usr/bin/sass',
+            'assetic.filter.less.class' => 'Assetic\\Filter\\LessFilter',
+            'assetic.filter.less.node' => '/usr/local/bin/node',
+            'assetic.filter.less.node_paths' => array(
+                0 => '/usr/local/lib/node_modules',
+            ),
+            'assetic.filter.less.timeout' => NULL,
+            'assetic.filter.less.compress' => NULL,
+            'assetic.filter.less.load_paths' => array(
+
+            ),
             'assetic.filter.cssrewrite.class' => 'Assetic\\Filter\\CssRewriteFilter',
             'assetic.twig_extension.functions' => array(
 
@@ -4222,6 +4444,31 @@ class appDevDebugProjectContainer extends Container
             'sensio_framework_extra.converter.doctrine.class' => 'Sensio\\Bundle\\FrameworkExtraBundle\\Request\\ParamConverter\\DoctrineParamConverter',
             'sensio_framework_extra.converter.datetime.class' => 'Sensio\\Bundle\\FrameworkExtraBundle\\Request\\ParamConverter\\DateTimeParamConverter',
             'sensio_framework_extra.view.listener.class' => 'Sensio\\Bundle\\FrameworkExtraBundle\\EventListener\\TemplateListener',
+            'braincrafted_bootstrap.form.type.collection.class' => 'Braincrafted\\Bundle\\BootstrapBundle\\Form\\Type\\BootstrapCollectionType',
+            'braincrafted_bootstrap.form.type.money.class' => 'Braincrafted\\Bundle\\BootstrapBundle\\Form\\Type\\MoneyType',
+            'braincrafted_bootstrap.form.type.form_actions.class' => 'Braincrafted\\Bundle\\BootstrapBundle\\Form\\Type\\FormActionsType',
+            'braincrafted_bootstrap.form.type.form_static_control.class' => 'Braincrafted\\Bundle\\BootstrapBundle\\Form\\Type\\FormStaticControlType',
+            'braincrafted_bootstrap.form.extension.typesetter_extension.class' => 'Braincrafted\\Bundle\\BootstrapBundle\\Form\\Extension\\TypeSetterExtension',
+            'braincrafted_bootstrap.form.extension.button_extension.class' => 'Braincrafted\\Bundle\\BootstrapBundle\\Form\\Extension\\ButtonTypeExtension',
+            'braincrafted_bootstrap.form.extension.static_control.class' => 'Braincrafted\\Bundle\\BootstrapBundle\\Form\\Extension\\StaticControlExtension',
+            'braincrafted_bootstrap.form.extension.input_group_button.class' => 'Braincrafted\\Bundle\\BootstrapBundle\\Form\\Extension\\InputGroupButtonExtension',
+            'braincrafted_bootstrap.twig.icon_extension.class' => 'Braincrafted\\Bundle\\BootstrapBundle\\Twig\\BootstrapIconExtension',
+            'braincrafted_bootstrap.twig.label_extension.class' => 'Braincrafted\\Bundle\\BootstrapBundle\\Twig\\BootstrapLabelExtension',
+            'braincrafted_bootstrap.twig.badge_extension.class' => 'Braincrafted\\Bundle\\BootstrapBundle\\Twig\\BootstrapBadgeExtension',
+            'braincrafted_bootstrap.twig.form_extension.class' => 'Braincrafted\\Bundle\\BootstrapBundle\\Twig\\BootstrapFormExtension',
+            'braincrafted_bootstrap.icon_prefix' => 'glyphicon',
+            'braincrafted_bootstrap.flash.class' => 'Braincrafted\\Bundle\\BootstrapBundle\\Session\\FlashMessage',
+            'braincrafted_bootstrap.customize' => array(
+                'variables_file' => NULL,
+                'bootstrap_output' => ($this->targetDirs[2].'/Resources/less/bootstrap.less'),
+                'bootstrap_template' => 'BraincraftedBootstrapBundle:Bootstrap:bootstrap.less.twig',
+            ),
+            'braincrafted_bootstrap.assets_dir' => ($this->targetDirs[2].'/../vendor/twbs/bootstrap'),
+            'braincrafted_bootstrap.fontawesome_dir' => ($this->targetDirs[2].'/../vendor/fortawesome/font-awesome'),
+            'braincrafted_bootstrap.fonts_dir' => ($this->targetDirs[2].'/../web/fonts'),
+            'braincrafted_bootstrap.output_dir' => NULL,
+            'braincrafted_bootstrap.less_filter' => 'less',
+            'braincrafted_bootstrap.icon_tag' => 'span',
             'web_profiler.controller.profiler.class' => 'Symfony\\Bundle\\WebProfilerBundle\\Controller\\ProfilerController',
             'web_profiler.controller.router.class' => 'Symfony\\Bundle\\WebProfilerBundle\\Controller\\RouterController',
             'web_profiler.controller.exception.class' => 'Symfony\\Bundle\\WebProfilerBundle\\Controller\\ExceptionController',
